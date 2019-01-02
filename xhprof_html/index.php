@@ -6,11 +6,12 @@ require_once XHPROF_CONFIG;
 include_once XHPROF_LIB_ROOT . '/display/xhprof.php';
 include (XHPROF_LIB_ROOT . "/utils/common.php");
 
-if(empty($_GET['site'])) {
-  die('Please provide query-string parameter "site" and the site you would like to analyse');
+if(empty($_GET['user'])) {
+  die('Please provide query-string parameter "user" with the unix user of the site you\'d like to analyse');
 }
 
-$_xhprof['dbtable'] = $_GET['site'];
+# grab the site from the URL and replace all non-word chars with underscores to match puppet implementation
+$_xhprof['dbtable'] = $_GET['user'];
 
 if (false !== $controlIPs && !in_array($_SERVER['REMOTE_ADDR'], $controlIPs))
 {

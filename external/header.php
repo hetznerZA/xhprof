@@ -1,6 +1,15 @@
 <?php
 
 require_once dirname(dirname(__FILE__)) . '/xhprof_lib/defaults.php';
+
+$query_string_param = '_profile';
+$profiling_enabled = !empty($_COOKIE['_profile']) || !empty($_GET[$query_string_param]);
+
+if(!$profiling_enabled) {
+  // don't go any further
+  return;
+}
+
 require_once XHPROF_CONFIG;
 
 if (PHP_SAPI == 'cli') {
@@ -60,23 +69,19 @@ class visibilitator
 if ($controlIPs === false || in_array($_SERVER['REMOTE_ADDR'], $controlIPs) || PHP_SAPI == 'cli')
 {
   /* Backwards Compatibility getparam check*/
-  if (!isset($_xhprof['getparam']))
-  {
-      $_xhprof['getparam'] = '_profile';
-  }
-  
-  if (isset($_GET[$_xhprof['getparam']]))
+  $_xhprof['getparam'] = $query_string_param;
+
+  if (isset($_GET[$query_string_param]))
   {
     //Give them a cookie to hold status, and redirect back to the same page
-    setcookie('_profile', $_GET[$_xhprof['getparam']]);
-    $newURI = str_replace(array($_xhprof['getparam'].'=1',$_xhprof['getparam'].'=0'), '', $_SERVER['REQUEST_URI']);
+    setcookie('_profile', $_GET[$query_string_param]);
+    $newURI = str_replace(array($query_string_param.'=1',$query_string_param.'=0'), '', $_SERVER['REQUEST_URI']);
     header("Location: $newURI");
     exit;
   }
   
-  if (isset($_COOKIE['_profile']) && $_COOKIE['_profile'] 
-          || PHP_SAPI == 'cli' && ( (isset($_SERVER[$envVarName]) && $_SERVER[$envVarName]) 
-          || (isset($_ENV[$envVarName]) && $_ENV[$envVarName])))
+  if($profiling_enabled || (PHP_SAPI == 'cli' && (isset($_SERVER[$envVarName]) && $_SERVER[$envVarName])
+      || (isset($_ENV[$envVarName]) && $_ENV[$envVarName])))
   {
       $_xhprof['display'] = true;
       $_xhprof['doprofile'] = true;

@@ -6,12 +6,7 @@ require_once XHPROF_CONFIG;
 include_once XHPROF_LIB_ROOT . '/display/xhprof.php';
 include (XHPROF_LIB_ROOT . "/utils/common.php");
 
-if(empty($_GET['user'])) {
-  die('Please provide query-string parameter "user" with the unix user of the site you\'d like to analyse');
-}
-
-# grab the site from the URL and replace all non-word chars with underscores to match puppet implementation
-$_xhprof['dbtable'] = $_GET['user'];
+require_once XHPROF_LIB_ROOT . '/load_dynamic_table.php';
 
 if (false !== $controlIPs && !in_array($_SERVER['REMOTE_ADDR'], $controlIPs))
 {

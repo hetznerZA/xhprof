@@ -31,6 +31,7 @@
 
 require_once dirname(dirname(__FILE__)) . '/xhprof_lib/defaults.php';
 require_once XHPROF_CONFIG;
+require_once XHPROF_LIB_ROOT . '/load_dynamic_table.php';
 
 if (false !== $controlIPs && !in_array($_SERVER['REMOTE_ADDR'], $controlIPs))
 {

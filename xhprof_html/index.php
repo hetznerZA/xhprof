@@ -6,6 +6,12 @@ require_once XHPROF_CONFIG;
 include_once XHPROF_LIB_ROOT . '/display/xhprof.php';
 include (XHPROF_LIB_ROOT . "/utils/common.php");
 
+if(empty($_GET['site'])) {
+  die('Please provide query-string parameter "site" and the site you would like to analyse');
+}
+
+$_xhprof['dbtable'] = $_GET['site'];
+
 if (false !== $controlIPs && !in_array($_SERVER['REMOTE_ADDR'], $controlIPs))
 {
   die("You do not have permission to view this page.");

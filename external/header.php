@@ -12,6 +12,11 @@ if(!$profiling_enabled) {
 
 require_once XHPROF_CONFIG;
 
+# config could not be loaded, don't attempt to profile
+if(!empty($_xhprof['error'])) {
+  return;
+}
+
 if (PHP_SAPI == 'cli') {
   $_SERVER['REMOTE_ADDR'] = null;
   $_SERVER['HTTP_HOST'] = null;
